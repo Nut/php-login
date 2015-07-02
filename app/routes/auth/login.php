@@ -1,12 +1,12 @@
 <?php
 
-$app->get('/login', function() use ($app) {
+$app->get('/login', $guest(), function() use ($app) {
 
 	$app->render('auth/login.php');
 	
 })->name('login');
 
-$app->post('/login', function() use ($app) {
+$app->post('/login', $guest(), function() use ($app) {
 	
 	$request = $app->request;
 
@@ -22,6 +22,7 @@ $app->post('/login', function() use ($app) {
 
 	if ($v->passes()) {
 		$user = $app->user
+			->where('active', true)
 			->where('username', $identifier)
 			->orWhere('email', $identifier)
 			->first();
@@ -29,11 +30,11 @@ $app->post('/login', function() use ($app) {
 		if ($user && $app->hash->passwordCheck($password, $user->password)) {
 			$_SESSION[$app->config->get('auth.session')] = $user->id;
 			$app->flash('global', 'You are now signed in!');
+			$app->response->redirect($app->urlFor('home'));
 		} else {
 			$app->flash('global', 'Could not log you in!');
+			$app->response->redirect($app->urlFor('login'));
 		}
-
-		$app->response->redirect($app->urlFor('login'));
 	}
 
 	$app->render('auth/login.php', [

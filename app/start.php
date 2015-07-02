@@ -5,6 +5,7 @@ use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 
 use Noodlehaus\Config;
+use RandomLib\Factory as RandomLib;
 
 use Nut\User\User;
 use Nut\Mail\Mailer;
@@ -35,6 +36,7 @@ $app->configureMode($app->config('mode'), function() use ($app) {
 });
 
 require 'database.php';
+require 'filters.php';
 require 'routes.php';
 
 $app->auth = false;
@@ -65,6 +67,11 @@ $app->container->singleton('mail', function() use ($app) {
 	$mailer->isHTML($app->config->get('mail.html'));
 
 	return new Mailer($app->view, $mailer);
+});
+
+$app->container->singleton('randomlib', function() {
+	$factory = new RandomLib;
+	return $factory->getMediumStrengthGenerator();
 });
 
 $view = $app->view();

@@ -23,8 +23,8 @@ class Mailer
 
 		call_user_func($callback, $message);
 
-		$this->mailer->From = 'test@yannickweb.de'; //change
-		$this->mailer->FromName = 'No Reply';		//change
+		$this->mailer->From = 'test@yannickweb.de';		//change
+		$this->mailer->FromName = 'No Reply';			//change
 
 		$this->mailer->send();
 	}

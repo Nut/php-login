@@ -25,9 +25,7 @@ class Validator extends Violin
 
 	public function validate_uniqueEmail($value, $input, $args)
 	{
-		$user = $this->user->where('email', $value);
-
-		return ! (bool) $user->count();
+		return ! (bool) $this->user->where('email', $value)->count();
 	}
 
 	public function validate_uniqueUsername($value, $input, $args)
