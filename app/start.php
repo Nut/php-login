@@ -13,6 +13,7 @@ use Nut\Helpers\Hash;
 use Nut\Validation\Validator;
 
 use Nut\Middleware\BeforeMiddleware;
+use Nut\Middleware\CsrfMiddleware;
 
 session_cache_limiter(false);
 session_start();
@@ -30,6 +31,7 @@ $app = new Slim([
 ]);
 
 $app->add(new BeforeMiddleware);
+$app->add(new CsrfMiddleware);
 
 $app->configureMode($app->config('mode'), function() use ($app) {
 	$app->config = Config::load(INC_ROOT . "/app/config/{$app->mode}.php");
